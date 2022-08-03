@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser,faSearch} from '@fortawesome/free-solid-svg-icons'
 import { Link,useNavigate } from 'react-router-dom'
-const Navbar=({login,setLogin})=>{
+import { useDispatch, useSelector } from 'react-redux'
+import { loginAction } from '../redux/actions/loginAction'
+const Navbar=()=>{
   const navigate = useNavigate()
+  let dispatch = useDispatch()
   const [inputVal,setInputVal] = useState('')
-  
+  const loginSelector = useSelector((state)=>state.login.authenticate)
+  const loginF = ()=>{
+    dispatch({
+      type: 'LOGOUT',
+    })
+    
+  }
   const menuList = ['여성','Divided','남성','신생아/유아','아동','H&M Home','sale','지속가능성']  
   const keyDown = (e)=>{
     setInputVal(e.target.value)
@@ -17,14 +26,16 @@ const Navbar=({login,setLogin})=>{
       navigate(`/?q=${keyword}`)
     }
   }
-  
+  useEffect(()=>{
+    console.log('로그인',loginSelector)
+  },[loginSelector])
   return (
     
     <div>
       <div className='login_btn'>
         <FontAwesomeIcon icon={faUser} />
-        {login ?
-        (<div onClick={()=>setLogin(false)} className='login_btn_title'>로그아웃</div>)
+        {loginSelector ?
+        (<div onClick={loginF} className='login_btn_title'>로그아웃</div>)
         :
         (<div onClick={()=>navigate('/login')} className='login_btn_title'>로그인</div>)
         }

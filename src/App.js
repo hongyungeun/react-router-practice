@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import PrivateRote from './routes/PrivateRote';
+import { useSelector } from 'react-redux';
 // 1. 전체상품 , 로그인, 상품상세페이지
 // 2. 전체상품페이지에선 전체 상품을 볼 수 있다.
 // 3. 로그인 버튼을 누르면 로그인 페이지가 나온디.
@@ -19,17 +20,15 @@ import PrivateRote from './routes/PrivateRote';
 // json 서버 시작 --> npx http://localhost:5000/products
 function App() {
   
-  const [login,setLogin]= useState(false)
-  useEffect(()=>{
-    console.log('hi',login)
-  },[login])
+  const authenticate= useSelector((state)=>state.login.authenticate)
+  
   return (
     <div className="App">
-      <Navbar login={login} setLogin={setLogin} />
+      <Navbar />
       <Routes>
         <Route path='/' element={<ProductAll />} />
-        <Route path='/login' element={<LoginPage setLogin={setLogin}/>} />
-        <Route path='/product/:id' element={<PrivateRote login={login} />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/product/:id' element={<PrivateRote login={authenticate} />} />
       </Routes>
     </div>
   );
